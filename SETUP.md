@@ -108,6 +108,27 @@ If you have salary data (from a union, salary survey, Glassdoor, or personal res
 
 This creates `salary_data.json` which the `/apply` workflow uses for salary benchmarking. If you skip this step, salary lookup is simply omitted.
 
+## 5b. Optional: browser automation to fill out applications
+
+The core workflow (`/scrape`, `/apply`) needs only WebSearch. If you also want Claude to
+**fill out application forms for you in a real browser** — the optional `auto-apply` skill,
+plus logged-in LinkedIn scraping — set up the `chrome-devtools` MCP:
+
+1. Install [Google Chrome](https://www.google.com/chrome/) and Node.js (for `npx`).
+2. This repo ships a pre-configured `.mcp.json`. When you start Claude Code in the repo, it
+   will ask whether to enable the `chrome-devtools` MCP server — approve it. (You can also
+   manage it with `claude mcp list`.)
+3. The first time the skill runs, the MCP opens a Chrome window. **Log into LinkedIn** there
+   (and any ATS accounts you use); the skill reuses that logged-in session on later runs.
+4. Trigger it with something like "apply to the next 3 jobs in the queue." By default the
+   skill fills everything and uploads your resume but **stops before the final Submit** so you
+   review and click Submit yourself.
+
+> ⚠ **Browser automation of job sites is Terms-of-Service-sensitive.** LinkedIn and many ATSes
+> restrict automated interaction and use CAPTCHA / anti-bot defenses. Use it with judgement,
+> keep actions human-paced, and never let it fabricate answers. This is an opt-in convenience,
+> not a bulk-apply bot.
+
 ## 6. Test the workflow
 
 Find a job posting you're interested in, then:

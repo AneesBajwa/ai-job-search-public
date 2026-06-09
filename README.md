@@ -35,6 +35,7 @@ The framework encodes career guidance best practices, including structured evalu
 - [Claude Code](https://claude.com/claude-code) (CLI)
 - Python 3.10+
 - LaTeX distribution with `lualatex` and `xelatex`: [TeX Live](https://tug.org/texlive/), [MacTeX](https://tug.org/mactex/), or [MiKTeX](https://miktex.org/). The CV compiles with `lualatex` (pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors); the cover letter compiles with `xelatex` because `cover.cls` requires `fontspec`.
+- **(Optional) Browser automation to fill out applications** — [Google Chrome](https://www.google.com/chrome/) + Node.js. This repo ships an `.mcp.json` that wires up the [`chrome-devtools` MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp); Claude Code offers to enable it on first run. It powers the optional `auto-apply` skill (and logged-in LinkedIn scraping). The core `/scrape` and `/apply` workflow runs on WebSearch and needs none of this.
 
 ## Quick start
 
@@ -97,13 +98,14 @@ This runs the full workflow: evaluate fit, draft CV + cover letter, review with 
 Two extra skills are included but **off the core path** — read their notes before using them:
 
 - **`daily-job-routine`** — an optional once-a-day routine that finds very recent (≤24h) net-new matches and syncs your applications from Gmail into the tracking files. Configure your constraints in the skill file first.
-- **`auto-apply`** — drives a logged-in Chrome (via the `chrome-devtools` MCP) to pre-fill application forms and upload your resume, **stopping before the final submit** so you review and click Submit yourself. ⚠ **Browser automation of job sites is ToS-sensitive** (LinkedIn and many ATSes restrict automated interaction and use CAPTCHA/anti-bot defenses). Use with judgement, keep it human-paced, and never fabricate answers.
+- **`auto-apply`** — drives a Chrome session (via the `chrome-devtools` MCP) to pre-fill application forms and upload your resume, **stopping before the final submit** so you review and click Submit yourself. To use it: enable the `chrome-devtools` MCP when Claude Code prompts you (it's pre-configured in `.mcp.json`), then log into LinkedIn (and any ATS accounts) in the Chrome window the MCP opens — the skill reuses that logged-in session. Trigger it with "apply to the next 3 jobs" or similar. ⚠ **Browser automation of job sites is ToS-sensitive** (LinkedIn and many ATSes restrict automated interaction and use CAPTCHA/anti-bot defenses). Use with judgement, keep it human-paced, and never fabricate answers.
 
 ## File structure
 
 ```
 ai-job-search/
 ├── CLAUDE.md                          # Main candidate profile + workflow rules (template)
+├── .mcp.json                          # Pre-configures the optional chrome-devtools MCP (browser automation)
 ├── .claude/
 │   ├── commands/
 │   │   ├── apply.md                   # /apply workflow (drafter-reviewer)
